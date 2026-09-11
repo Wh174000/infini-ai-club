@@ -1,0 +1,382 @@
+/* ========== 全局样式 ========== */
+:root {
+  --primary: #173d35;
+  --primary-light: #245648;
+  --accent: #d8b26b;
+  --bg: #f7f0e4;
+  --paper: #fffdf9;
+  --text: #23322e;
+  --muted: #718078;
+  --line: #ddd7cc;
+  --shadow: 0 10px 40px rgba(0,0,0,0.1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ========== 头部 ========== */
+.header {
+  background: var(--primary);
+  padding: 16px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.logo-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--accent);
+}
+
+.nav a {
+  color: rgba(255,255,255,0.8);
+  margin-left: 24px;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+
+.nav a:hover {
+  color: var(--accent);
+}
+
+/* ========== 主视觉 ========== */
+.hero {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  color: #fff;
+  padding: 80px 0;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: clamp(32px, 5vw, 56px);
+  line-height: 1.1;
+  margin-bottom: 20px;
+}
+
+.hero .lead {
+  font-size: 18px;
+  color: rgba(255,255,255,0.8);
+  max-width: 600px;
+  margin: 0 auto 30px;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 14px 28px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s;
+  display: inline-block;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--primary);
+}
+
+.btn-primary:hover {
+  background: #e8c47a;
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: #fff;
+  border: 2px solid rgba(255,255,255,0.3);
+}
+
+.btn-secondary:hover {
+  border-color: #fff;
+  background: rgba(255,255,255,0.1);
+}
+
+.affiliate-badge {
+  margin-top: 20px;
+  padding: 8px 16px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 20px;
+  display: inline-block;
+  font-size: 14px;
+}
+
+/* ========== 课程区 ========== */
+.courses-section {
+  padding: 60px 0;
+}
+
+.section-title {
+  font-size: 28px;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.course-card {
+  background: var(--paper);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.course-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+
+.course-cover {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+  background: linear-gradient(135deg, var(--primary-light), var(--primary));
+}
+
+.course-card .affiliate-info {
+  margin-top: 10px;
+  padding: 6px 10px;
+  background: rgba(216, 178, 107, 0.15);
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--text);
+  text-align: center;
+}
+
+.course-content {
+  padding: 20px;
+}
+
+.course-tags {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.tag {
+  padding: 4px 10px;
+  background: var(--bg);
+  border-radius: 12px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.course-name {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+.course-desc {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.course-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.course-price {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.course-price span {
+  font-size: 14px;
+  color: var(--muted);
+  text-decoration: line-through;
+  margin-left: 8px;
+  font-weight: 400;
+}
+
+.btn-buy {
+  padding: 10px 20px;
+  background: var(--primary);
+  color: #fff;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.btn-buy:hover {
+  background: var(--primary-light);
+}
+
+/* ========== 案例区 ========== */
+.cases-section {
+  padding: 60px 0;
+  background: var(--paper);
+}
+
+.cases-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.case-card {
+  background: var(--bg);
+  border-radius: 16px;
+  padding: 30px;
+  text-align: center;
+}
+
+.case-image {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.case-card h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+
+.case-card p {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ========== 关于区 ========== */
+.about-section {
+  padding: 60px 0;
+}
+
+.about-content {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.about-content p {
+  font-size: 16px;
+  color: var(--muted);
+  margin-bottom: 16px;
+  line-height: 1.8;
+}
+
+/* ========== 页脚 ========== */
+.footer {
+  background: var(--primary);
+  color: rgba(255,255,255,0.7);
+  padding: 40px 0 20px;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.footer-info h4 {
+  color: #fff;
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.footer-links {
+  display: flex;
+  gap: 20px;
+}
+
+.footer-links a {
+  color: rgba(255,255,255,0.7);
+  font-size: 14px;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover {
+  color: var(--accent);
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  font-size: 13px;
+}
+
+/* ========== 响应式 ========== */
+@media (max-width: 768px) {
+  .nav {
+    display: none;
+  }
+  
+  .hero {
+    padding: 60px 0;
+  }
+  
+  .courses-grid,
+  .cases-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .footer-links {
+    justify-content: center;
+  }
+}

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的订单 - infini小镇</title>
+  <link rel="stylesheet" href="assets/css/main.css?v=v20260911">
+  <style>
+    .orders-section {
+      padding: 60px 0;
+      min-height: calc(100vh - 200px);
+    }
+    .orders-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+    }
+    .empty-state .icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+    }
+    .order-card {
+      background: var(--paper);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow);
+    }
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+    .order-id {
+      font-size: 12px;
+      color: var(--muted);
+      font-family: monospace;
+    }
+    .order-status {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .status-paid {
+      background: #e1f0e6;
+      color: #286247;
+    }
+    .status-pending {
+      background: #fff0c9;
+      color: #875d14;
+    }
+    .status-cancelled {
+      background: #fbe5df;
+      color: #8a473b;
+    }
+    .order-body {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: center;
+    }
+    .order-course {
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+    .order-meta {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .order-meta span {
+      margin-right: 16px;
+    }
+    .order-amount {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+      text-align: right;
+    }
+    .order-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .btn-sm {
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+    .btn-primary-sm {
+      background: var(--primary);
+      color: #fff;
+    }
+    .btn-primary-sm:hover {
+      background: var(--primary-light);
+    }
+    .btn-outline-sm {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--line);
+    }
+    .btn-outline-sm:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .admin-panel {
+      margin-top: 40px;
+      padding-top: 40px;
+      border-top: 2px dashed var(--line);
+    }
+    .admin-title {
+      font-size: 18px;
+      margin-bottom: 16px;
+      color: var(--primary);
+    }
+    .affiliate-summary {
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .affiliate-summary h3 {
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+    }
+    .stat-item {
+      text-align: center;
+      padding: 16px;
+      background: var(--paper);
+      border-radius: 8px;
+    }
+    .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <a href="index.html" class="logo">
+        <img src="assets/images/logo.svg" alt="infini小镇" class="logo-img">
+        <span>infini小镇</span>
+      </a>
+    </div>
+  </header>
+
+  <section class="orders-section">
+    <div class="container orders-container">
+      <h1 style="margin-bottom:24px;">我的订单</h1>
+      
+      <div id="orders-list">
+        <!-- 动态加载订单 -->
+      </div>
+
+      <!-- 管理后台（仅管理员可见） -->
+      <div class="admin-panel" id="admin-panel" style="display:none;">
+        <h2 class="admin-title">推广数据统计</h2>
+        
+        <div class="affiliate-summary">
+          <h3>通州小兵推广数据</h3>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-value" id="stat-total-orders">0</div>
+              <div class="stat-label">总订单数</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value" id="stat-total-revenue">¥0</div>
+              <div class="stat-label">总销售额</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value" id="stat-total-commission">¥0</div>
+              <div class="stat-label">总佣金</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value" id="stat-affiliate-orders">0</div>
+              <div class="stat-label">通州小兵订单</div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-sm btn-primary-sm" onclick="exportOrdersCSV()" style="margin-right:12px;">
+          📥 导出订单CSV
+        </button>
+        <button class="btn-sm btn-outline-sm" onclick="resetAllData()">
+          🗑️ 重置所有数据
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <script src="assets/js/config.js?v=v20260911"></script>
+  <script src="assets/js/utils.js?v=v20260911"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      renderOrders();
+      checkAdminAccess();
+    });
+
+    /**
+     * 渲染订单列表
+     */
+    function renderOrders() {
+      const orders = getOrders();
+      const container = document.getElementById('orders-list');
+
+      if (orders.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="icon">📋</div>
+            <h3>暂无订单</h3>
+            <p>您还没有购买任何课程</p>
+            <a href="index.html" class="btn-sm btn-primary-sm" style="margin-top:20px;display:inline-block;">浏览课程</a>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = orders.map(order => `
+        <div class="order-card">
+          <div class="order-header">
+            <div>
+              <div class="order-id">${order.id}</div>
+              <div class="order-meta">
+                <span>📅 ${formatDate(order.created_at)}</span>
+                ${order.affiliate_code ? `<span>🎯 通州小兵推荐</span>` : ''}
+              </div>
+            </div>
+            <span class="order-status status-${order.status}">${getOrderStatusText(order.status)}</span>
+          </div>
+          <div class="order-body">
+            <div>
+              <div class="order-course">${order.course_name}</div>
+              <div class="order-meta">
+                客户：${order.customer_name} | ${order.customer_phone}
+                ${order.customer_company ? ` | ${order.customer_company}` : ''}
+              </div>
+            </div>
+            <div class="order-amount">¥${order.price.toFixed(2)}</div>
+          </div>
+          <div class="order-actions">
+            ${order.status === 'paid' ? `<button class="btn-sm btn-primary-sm" onclick="alert('课程学习功能开发中')">📖 开始学习</button>` : ''}
+            <button class="btn-sm btn-outline-sm" onclick="deleteOrder('${order.id}')">删除</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    /**
+     * 获取订单状态文本
+     */
+    function getOrderStatusText(status) {
+      const map = {
+        'paid': '已支付',
+        'pending': '待确认',
+        'cancelled': '已取消'
+      };
+      return map[status] || status;
+    }
+
+    /**
+     * 删除订单
+     */
+    function deleteOrder(orderId) {
+      if (!confirm('确定要删除这个订单吗？')) return;
+      
+      let orders = getOrders();
+      orders = orders.filter(o => o.id !== orderId);
+      localStorage.setItem('orders', JSON.stringify(orders));
+      renderOrders();
+      showToast('订单已删除', 'success');
+    }
+
+    /**
+     * 检查管理员权限（简单的密码验证）
+     */
+    function checkAdminAccess() {
+      // 实际项目中应该使用真正的登录验证
+      const isAdmin = localStorage.getItem('is_admin') === 'true';
+      if (isAdmin || window.location.search.includes('admin=true')) {
+        document.getElementById('admin-panel').style.display = 'block';
+        renderAdminStats();
+      }
+    }
+
+    /**
+     * 渲染管理员统计
+     */
+    function renderAdminStats() {
+      const orders = getOrders();
+      const tzxbOrders = orders.filter(o => o.affiliate_code === AFFILIATE_CONFIG.tzb_code);
+      
+      const totalRevenue = orders.reduce((sum, o) => sum + o.price, 0);
+      const totalCommission = tzxbOrders.reduce((sum, o) => sum + (o.commission || 0), 0);
+
+      document.getElementById('stat-total-orders').textContent = orders.length;
+      document.getElementById('stat-total-revenue').textContent = `¥${totalRevenue.toFixed(0)}`;
+      document.getElementById('stat-total-commission').textContent = `¥${totalCommission.toFixed(0)}`;
+      document.getElementById('stat-affiliate-orders').textContent = tzxbOrders.length;
+    }
+
+    /**
+     * 重置所有数据（测试用）
+     */
+    function resetAllData() {
+      if (!confirm('确定要清空所有订单数据吗？此操作不可恢复！')) return;
+      if (!confirm('再次确认：真的要清空所有数据？')) return;
+      
+      localStorage.removeItem('orders');
+      localStorage.removeItem('affiliate_source');
+      localStorage.removeItem('affiliate_source_time');
+      showToast('数据已清空', 'success');
+      setTimeout(() => location.reload(), 1000);
+    }
+  </script>
+</body>
+</html>
